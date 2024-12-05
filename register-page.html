@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <style>
+        .requirement {
+            color: gray;
+        }
+        .requirement.met {
+            color: green;
+        }
+        #alert-message-invalid-email {
+            display: none;
+        }
+        #alert-message-different-passwords {
+            display: none;
+        }
+        #alert-message-password-complexity {
+            display: none;
+        }
+        #alert-message-duplicate-email {
+            display: none;
+        }
+        .password-container {
+            position: relative;
+        }
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card shadow-lg mt-5">
+                <div class="card-header text-bg-primary">Creare cont</div>
+                <div class="card-body">
+                    <div id="alert-message-duplicate-email" class="alert alert-danger text-center" role="alert">
+                        Exista deja un utilizator cu aceasta adresa de email. Incercati din nou.
+                    </div>
+
+                    <div id="alert-message-invalid-email" class="alert alert-danger text-center" role="alert">
+                        Adresa de email trebuie sa fie de tip '@gmail.com'
+                    </div>
+
+                    <div id="alert-message-different-passwords" class="alert alert-danger text-center" role="alert">
+                        Parolele introduse nu coincid! Incearca din nou.
+                    </div>
+
+                    <div id="alert-message-password-complexity" class="alert alert-danger text-center" role="alert">
+                        Parola introdusa nu respecta toate conditiile!
+                    </div>
+
+                    <form method="post" onsubmit="return register(event)">
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+                            <label for="email">Adresa de email</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="nume" name="nume" placeholder="Nume" required autofocus>
+                            <label for="nume">Nume</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="prenume" name="prenume" placeholder="prenume" required autofocus>
+                            <label for="prenume">Prenume</label>
+                        </div>
+
+                        <div class="form-floating mb-3 password-container">
+                            <input type="password" class="form-control" id="password" name="parola" placeholder="Parola" oninput="validatePasswordComplexity()" required>
+                            <label for="password">Parola</label>
+                            <span class="toggle-password" onclick="togglePasswordVisibility('password')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" id="toggle-icon-new_password" viewBox="0 0 16 16">
+                                    <path d="M8 3c-3.3 0-6 3.467-6 5s2.7 5 6 5 6-3.467 6-5-2.7-5-6-5zm0 1a7.488 7.488 0 0 1 4.65 2.27A6.528 6.528 0 0 1 13 8c0 .54-.167 1.11-.35 1.57C11.35 11.6 9.804 12.5 8 12.5c-1.8 0-3.35-.9-4.65-2.93A6.513 6.513 0 0 1 3 8c0-.54.167-1.11.35-1.57A7.498 7.498 0 0 1 8 4z"/>
+                                    <path d="M8 6.5c-.65 0-1.15.5-1.15 1.15S7.35 8.8 8 8.8c.65 0 1.15-.5 1.15-1.15S8.65 6.5 8 6.5z"/>
+                                </svg>
+                            </span>
+                        </div>
+
+                        <div id="password-requirements">
+                            <ul>
+                                <li id="uppercase" class="requirement">1 litera mare</li>
+                                <li id="lowercase" class="requirement">1 litera mica</li>
+                                <li id="number" class="requirement">1 cifra</li>
+                                <li id="special" class="requirement">1 caracter special</li>
+                                <li id="length" class="requirement">8-12 caractere</li>
+                            </ul>
+                        </div>
+
+                        <div class="form-floating mb-3 password-container">
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirma parola" required>
+                            <label for="confirm_password">Confirma parola</label>
+                            <span class="toggle-password" onclick="togglePasswordVisibility('confirm_password')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" id="toggle-icon-new_password" viewBox="0 0 16 16">
+                                    <path d="M8 3c-3.3 0-6 3.467-6 5s2.7 5 6 5 6-3.467 6-5-2.7-5-6-5zm0 1a7.488 7.488 0 0 1 4.65 2.27A6.528 6.528 0 0 1 13 8c0 .54-.167 1.11-.35 1.57C11.35 11.6 9.804 12.5 8 12.5c-1.8 0-3.35-.9-4.65-2.93A6.513 6.513 0 0 1 3 8c0-.54.167-1.11.35-1.57A7.498 7.498 0 0 1 8 4z"/>
+                                    <path d="M8 6.5c-.65 0-1.15.5-1.15 1.15S7.35 8.8 8 8.8c.65 0 1.15-.5 1.15-1.15S8.65 6.5 8 6.5z"/>
+                                </svg>
+                            </span>
+                        </div>
+
+                        <div class="d-grid">
+                            <button class="btn btn-success" type="submit">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus" viewBox="0 0 16 16">
+                                    <path d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm8 3.5a.5.5 0 0 1-.5.5H13v2.5a.5.5 0 0 1-1 0V14h-2.5a.5.5 0 0 1 0-1H12v-2.5a.5.5 0 0 1 1 0V13h2.5a.5.5 0 0 1 .5.5z"/>
+                                </svg>
+                                Creeaza cont
+                            </button>
+                        </div>
+
+                        <div class="mt-3 text-center">
+                            <a href="log-in-page.html" class="text-decoration-none">Inapoi la Login</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function validatePasswordComplexity() {
+        const password = document.getElementById('password').value;
+        document.getElementById('uppercase').classList.toggle('met', /[A-Z]/.test(password));
+        document.getElementById('lowercase').classList.toggle('met', /[a-z]/.test(password));
+        document.getElementById('number').classList.toggle('met', /[0-9]/.test(password));
+        document.getElementById('special').classList.toggle('met', /[!@#$%^&*(),.?":{}|<>]/.test(password));
+        document.getElementById('length').classList.toggle('met', password.length >= 8 && password.length <= 12);
+    }
+
+    function validateEmail(email) {
+        if (email.endsWith("@gmail.com")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    function isPasswordComplex(password) {
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasLowerCase = /[a-z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+        const isCorrectLength = password.length >= 8 && password.length <= 12;
+        
+        return hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar && isCorrectLength;
+    }
+
+    function validateAccount(email, password, confirmPassword) {
+        const alertMessageDuplicateEmail = document.getElementById("alert-message-duplicate-email");
+        const alertMessageInvalidEmail = document.getElementById("alert-message-invalid-email");
+        const alertMessageDifferentPasswords = document.getElementById("alert-message-different-passwords");
+        const alertMessagePasswordComplexity = document.getElementById("alert-message-password-complexity");
+
+        alertMessageDuplicateEmail.style.display = "none";
+
+        if (!validateEmail(email)) {
+            alertMessageInvalidEmail.style.display = "block";
+            alertMessageDifferentPasswords.style.display = "none";
+            alertMessagePasswordComplexity.style.display = "none";
+            return false;
+        }
+        else {
+            alertMessageInvalidEmail.style.display = "none";
+            if (!isPasswordComplex(password)) {
+                alertMessageDifferentPasswords.style.display = "none";
+                alertMessagePasswordComplexity.style.display = "block";
+                return false;
+            }
+            else {
+                alertMessagePasswordComplexity.style.display = "none";
+                if (password !== confirmPassword) {
+                    alertMessageDifferentPasswords.style.display = "block";
+                    return false;
+                } else {
+                    alertMessageDifferentPasswords.style.display = "none";
+                    return true;
+                }
+            }
+        }
+    }
+
+    async function register(event) {
+        event.preventDefault();
+        const email = document.getElementById('email').value;
+        const nume = document.getElementById('nume').value;
+        const prenume = document.getElementById('prenume').value;
+        const parola = document.getElementById('password').value;
+        const confirmaParola = document.getElementById("confirm_password").value;
+        const alertMessageDuplicateEmail = document.getElementById("alert-message-duplicate-email");
+
+        if (validateAccount(email, parola, confirmaParola)) {
+            try {
+                const response = await fetch('http://localhost:3000/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, nume, prenume, parola })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    window.location.href = 'dashboard.html';
+                }
+                else {
+                    alertMessageDuplicateEmail.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alertMessageDuplicateEmail.style.display = 'block';
+            }
+        }
+    }
+
+    function togglePasswordVisibility(inputId) {
+        const passwordInput = document.getElementById(inputId);
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+        } else {
+            passwordInput.type = "password";
+        }
+    }
+</script>
+</body>
+</html>
