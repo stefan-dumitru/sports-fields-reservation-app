@@ -10,8 +10,6 @@ const nodemailer = require('nodemailer');
 // const bcrypt = require('bcrypt');
 const path = require('path');
 
-const GOOGLE_API_KEY = "AIzaSyDbEFZORmZdN-krU19xXkArhqRXC8R3Qn8";
-
 const app = express();
 // const PORT = 3000;
 const PORT = process.env.PORT || 3000;
@@ -444,7 +442,7 @@ app.get("/get-coordinates", async (req, res) => {
             {
                 params: {
                     address: address,
-                    key: GOOGLE_API_KEY,
+                    key: process.env.GOOGLE_MAPS_API_KEY,
                 },
             }
         );
@@ -513,6 +511,10 @@ app.post('/get-training-plan', async (req, res) => {
         console.error("Error fetching training plan:", error);
         res.status(500).json({ success: false, message: "Failed to fetch training plan." });
     }
+});
+
+app.get('/get-google-maps-key', (_req, res) => {
+    res.json({ apiKey: process.env.GOOGLE_MAPS_API_KEY });
 });
 
 app.get('/set-new-password', (_req, res) => {
