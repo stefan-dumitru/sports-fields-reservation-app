@@ -95,8 +95,8 @@ app.post('/register', (req, res) => {
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-      user: 'dumitru.stefan023@gmail.com',
-      pass: 'wwuw ysph idrd fzwx'
+      user: process.env.USER_EMAIL,
+      pass: process.env.PASS
   }
 });
 
@@ -128,10 +128,10 @@ app.post('/reset-password', (req, res) => {
 
             const resetLink = `http://localhost:3000/set-new-password?token=${resetToken}`;
             const mailOptions = {
-                from: 'dumitru.stefan023@gmail.com',
+                from: process.env.USER_EMAIL,
                 to: email,
-                subject: 'Password Reset Request',
-                text: `Click the link to reset your password: ${resetLink}`
+                subject: 'Resetare parola',
+                text: `Apasa pe acest link pentru a-ti reseta parola: ${resetLink}`
             };
 
             transporter.sendMail(mailOptions, (error) => {
